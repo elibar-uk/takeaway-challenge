@@ -9,6 +9,13 @@ attr_reader :menu_list
   end
 
   def display_menu
-    @menu_list
+    @menu_list.dup
   end
+  def add(dish, price)
+  @menu_list[dish]=price
+end
+
+def delete(dish)
+  @menu_list.reject!{ |k| k == dish}
+end
 end

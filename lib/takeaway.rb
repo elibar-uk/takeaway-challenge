@@ -2,7 +2,8 @@ require_relative 'menu'
 require_relative 'message'
 
 class Takeaway
-  attr_reader :menu, :current_order
+  attr_reader :menu
+  attr_reader  :current_order   # - needs to be headen
   def initialize(menu: Menu)
     @menu = menu.new
     @current_order = []
@@ -22,13 +23,18 @@ class Takeaway
     end
     @current_order
   end
+  def remove(item)
+    @current_order.delete_at(@current_order.find_index({item => @menu.menu_list[item]}))
+    total_pay
+    @current_order
+  end
 
   def total
     total_pay
   end
 
-  def checkout
-    fail "the total is not correct" if !total
+  def checkout(total)
+    fail "the total is not correct" if total != total_pay
     Message.new.send_sms "Thank you for the order! It will be de delivered by #{Time.new.hour + 1}:#{Time.new.min}"
   end
 
@@ -36,5 +42,4 @@ class Takeaway
   def total_pay
     @cost.inject(0){|sum,x| sum + x }
   end
-
 end
